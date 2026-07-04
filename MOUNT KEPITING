@@ -1,0 +1,153 @@
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local LP = Players.LocalPlayer
+
+-- ==================== ANTI DOUBLE EXECUTE ====================
+if getgenv and getgenv().CenzyLoaded then
+    return game.Players.LocalPlayer:Kick("❌ Script sudah dijalankan!")
+end
+if getgenv then getgenv().CenzyLoaded = true end
+
+-- ==================== CHECKPOINT LIST ====================
+local CP = {
+    Vector3.new(551.21, 51.05, 811.17), Vector3.new(661.03, 59.98, 810.76),
+    Vector3.new(808.48, 51.05, 824.69), Vector3.new(932.35, 130.96, 823.20),
+    Vector3.new(1179.58, 131.45, 850.37), Vector3.new(1178.99, 131.54, 1023.47),
+    Vector3.new(1174.18, 273.55, 1183.64), Vector3.new(1206.06, 455.56, 1331.12),
+    Vector3.new(1194.92, 547.12, 1668.29), Vector3.new(1208.99, 629.91, 1661.16),
+    Vector3.new(700.05, 632.99, 1674.05), Vector3.new(469.12, 632.86, 1731.09),
+    Vector3.new(318.30, 687.37, 1622.57), Vector3.new(256.52, 668.41, 1767.55),
+    Vector3.new(256.63, 708.06, 2196.48), Vector3.new(58.76, 1325.40, 2204.34)
+}
+
+-- ==================== KEY SYSTEM ====================
+local CorrectKey = "cenzyrusuhmt"
+local keyInput = ""
+
+print("🔑 Cenzy Hub Key System Loaded!")
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- Key Window
+local KeyWindow = Rayfield:CreateWindow({
+    Name = "Cenzy Hub | Key System",
+    LoadingTitle = "Key Verification",
+    LoadingSubtitle = "MT Kepiting",
+})
+
+local KeyTab = KeyWindow:CreateTab("🔑 Key", 4483362458)
+
+KeyTab:CreateParagraph({Title = "Key System", Content = "Masukkan key yang benar untuk membuka Cenzy Hub"})
+
+local keyBox = KeyTab:CreateInput({
+    Name = "Enter Key",
+    PlaceholderText = "Ketik key disini...",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        keyInput = Text
+    end,
+})
+
+KeyTab:CreateButton({
+    Name = "Submit Key",
+    Callback = function()
+        if keyInput == CorrectKey then
+            Rayfield:Notify({
+                Title = "✅ Key Benar!",
+                Content = "Selamat datang bos! Cenzy Hub terbuka",
+                Duration = 4
+            })
+            loadHub()
+        else
+            Rayfield:Notify({
+                Title = "❌ Key Salah!",
+                Content = "Key yang lu masukin salah goblok!",
+                Duration = 4
+            })
+        end
+    end,
+})
+
+-- ==================== MAIN HUB ====================
+function loadHub()
+    local Window = Rayfield:CreateWindow({
+        Name = "Cenzy Hub v1.0.7 | MT Kepiting",
+        LoadingTitle = "Cenzy Hub",
+        LoadingSubtitle = "by Bexus & Nexus",
+    })
+
+    local MainTab = Window:CreateTab("🏠 Home", 4483362458)
+    local FarmTab = Window:CreateTab("🌾 Auto Farm", 6026568198)
+
+    MainTab:CreateParagraph({Title = "Status", Content = "FULLY LOADED + KEY PROTECTED"})
+    MainTab:CreateLabel("Ping: Checking...")
+
+    local farmToggle = FarmTab:CreateToggle({
+        Name = "Auto Farm",
+        CurrentValue = false,
+        Callback = function(Value)
+            _G.AutoFarm = Value
+            Rayfield:Notify({Title = "Auto Farm", Content = Value and "AUTO FARM NYALA BOS! Gas!" or "Farm Mati", Duration = 3})
+        end,
+    })
+
+    FarmTab:CreateSlider({
+        Name = "Delay (Detik)",
+        Range = {0.4, 2},
+        Increment = 0.05,
+        CurrentValue = 0.75,
+        Callback = function(Value) _G.Delay = Value end,
+    })
+
+    -- Nuclear Anti Reset
+    local function antiReset()
+        pcall(function()
+            if LP.Character then
+                local hum = LP.Character:FindFirstChildOfClass("Humanoid")
+                if hum then
+                    hum.Reset = function() return nil end
+                    hum:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+                end
+            end
+        end)
+    end
+
+    spawn(function()
+        while wait(0.4) do
+            antiReset()
+        end
+    end)
+
+    LP.CharacterAdded:Connect(function() task.wait(0.4) antiReset() end)
+
+    -- FIXED FARM LOOP
+    spawn(function()
+        while wait(0.1) do
+            if _G.AutoFarm and LP.Character then
+                local hrp = LP.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    for _, pos in ipairs(CP) do
+                        if not _G.AutoFarm then break end
+                        
+                        hrp.CFrame = CFrame.new(pos + Vector3.new(0, 7, 0))
+                        task.wait(_G.Delay)
+                        
+                        if hrp then
+                            hrp.Velocity = Vector3.new(0, 0, 0)
+                        end
+                    end
+                    
+                    pcall(function()
+                        local remote = RS:FindFirstChild("CP_DropToStart") or RS:FindFirstChild("Reset")
+                        if remote then remote:FireServer() end
+                    end)
+                    task.wait(1.8)
+                end
+            end
+        end
+    end)
+
+    Rayfield:Notify({Title = "Cenzy Hub", Content = "Key Accepted! Enjoy farming 😈", Duration = 5})
+end
+
+print("✅ Cenzy Hub Key System Ready! 😈🤪👎")
