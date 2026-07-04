@@ -1,0 +1,486 @@
+-- =================================================================== --
+--  CENZY HUB - PERFECT REPLICA EDITION V3.2                           --
+--  SUB-GAME: 🦀 MT kepiting | SECURITY: ANTI-TAMPER 404 ACTIVE        --
+-- =================================================================== --
+
+-- FAKE ENGINE INJECTION TO FOOL DECOMPILERS
+local _404_NOT_FOUND = true
+local function SECURE_LOAD() if not _404_NOT_FOUND then error("HTTP 404 Not Found") end end
+pcall(SECURE_LOAD)
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+local Stats = game:GetService("Stats")
+local LocalPlayer = Players.LocalPlayer
+
+-- Engine Setup (Protected)
+local Checkpoints = {
+    {Name = "Checkpoint 1", Pos = Vector3.new(551.21, 51.05, 811.17)},
+    {Name = "Checkpoint 2", Pos = Vector3.new(661.03, 59.98, 810.76)},
+    {Name = "Checkpoint 3", Pos = Vector3.new(808.48, 51.05, 824.69)},
+    {Name = "Checkpoint 4", Pos = Vector3.new(932.35, 130.96, 823.20)},
+    {Name = "Checkpoint 5", Pos = Vector3.new(1179.58, 131.45, 850.37)},
+    {Name = "Checkpoint 6", Pos = Vector3.new(1178.99, 131.54, 1023.47)},
+    {Name = "Checkpoint 7", Pos = Vector3.new(1174.18, 273.55, 1183.64)},
+    {Name = "Checkpoint 8", Pos = Vector3.new(1206.06, 455.56, 1331.12)},
+    {Name = "Checkpoint 9", Pos = Vector3.new(1194.92, 547.12, 1668.29)},
+    {Name = "Checkpoint 10", Pos = Vector3.new(1208.99, 629.91, 1661.16)},
+    {Name = "Checkpoint 11", Pos = Vector3.new(700.05, 632.99, 1674.05)},
+    {Name = "Checkpoint 12", Pos = Vector3.new(469.12, 632.86, 1731.09)},
+    {Name = "Checkpoint 13", Pos = Vector3.new(318.30, 687.37, 1622.57)},
+    {Name = "Checkpoint 14", Pos = Vector3.new(256.52, 668.41, 1767.55)},
+    {Name = "Checkpoint 15", Pos = Vector3.new(256.63, 708.06, 2196.48)},
+    {Name = "Checkpoint 16", Pos = Vector3.new(58.76, 1325.40, 2204.34)}
+}
+
+_G.AutoFarmActive = false
+_G.TpDelay = 1.0
+local CorrectKey = "cenzyvseverybody"
+local KeyVerified = false
+
+-- GUI Re-Creation
+local TargetGui = LocalPlayer:WaitForChild("PlayerGui")
+if TargetGui:FindFirstChild("CenzyHub") then TargetGui["CenzyHub"]:Destroy() end
+
+local ScreenGui = Instance.new("ScreenGui", TargetGui)
+ScreenGui.Name = "CenzyHub"
+ScreenGui.ResetOnSpawn = false
+
+-- =================================================================== --
+--  ANTI-TAMPER CORE MECHANISM (TRIGGER 404 ERROR ON ILLEGAL ATTEMPTS) --
+-- =================================================================== --
+local function TriggerFakeCrash(reason)
+    if ScreenGui then ScreenGui:Destroy() end
+    task.wait(0.1)
+    warn("[CenzyHub Error]: Code Execution Failed - Error 404 (Not Found)")
+    error("⚡ Runtime Error: " .. tostring(reason) .. " (Code: 404)")
+end
+
+-- Anti Hooking Protection Check
+local scriptIntegrity = true
+task.spawn(function()
+    while task.wait(3) do
+        if not ScreenGui or not ScreenGui.Parent then 
+            TriggerFakeCrash("Hierarchy Tampered") 
+            break 
+        end
+    end
+end)
+
+-- ========================================== --
+--  KEY SYSTEM INTERFACE (GREEN THEME)       --
+-- ========================================== --
+local KeyFrame = Instance.new("Frame", ScreenGui)
+KeyFrame.Size = UDim2.new(0, 340, 0, 180)
+KeyFrame.Position = UDim2.new(0.5, -170, 0.4, -90)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(34, 69, 49)
+KeyFrame.BackgroundTransparency = 0.1
+KeyFrame.BorderSizePixel = 0
+Instance.new("UICorner", KeyFrame).CornerRadius = UDim.new(0, 12)
+
+local KeyTitle = Instance.new("TextLabel", KeyFrame)
+KeyTitle.Size = UDim2.new(1, 0, 0, 40)
+KeyTitle.BackgroundTransparency = 1
+KeyTitle.Text = "🔑 Cenzy Hub — Verification"
+KeyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyTitle.Font = Enum.Font.GothamBold
+KeyTitle.TextSize = 14
+
+local KeyInput = Instance.new("TextBox", KeyFrame)
+KeyInput.Size = UDim2.new(1, -40, 0, 36)
+KeyInput.Position = UDim2.new(0, 20, 0, 55)
+KeyInput.BackgroundColor3 = Color3.fromRGB(24, 52, 36)
+KeyInput.Text = ""
+KeyInput.PlaceholderText = "Enter Access Key Here..."
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.Font = Enum.Font.Gotham
+KeyInput.TextSize = 12
+Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
+
+local SubmitBtn = Instance.new("TextButton", KeyFrame)
+SubmitBtn.Size = UDim2.new(1, -40, 0, 36)
+SubmitBtn.Position = UDim2.new(0, 20, 0, 105)
+SubmitBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SubmitBtn.Text = "Check Key"
+SubmitBtn.TextColor3 = Color3.fromRGB(34, 69, 49)
+SubmitBtn.Font = Enum.Font.GothamBold
+SubmitBtn.TextSize = 12
+Instance.new("UICorner", SubmitBtn).CornerRadius = UDim.new(0, 8)
+
+-- Dragging for Key Frame
+local kDragging, kDragInput, kDragStart, kStartPos
+KeyFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        kDragging = true kDragStart = input.Position kStartPos = KeyFrame.Position
+    end
+end)
+KeyFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then kDragInput = input end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if input == kDragInput and kDragging then
+        local delta = input.Position - kDragStart
+        KeyFrame.Position = UDim2.new(kStartPos.X.Scale, kStartPos.X.Offset + delta.X, kStartPos.Y.Scale, kStartPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- ========================================== --
+--  MAIN FRAME & CONTROLS                     --
+-- ========================================== --
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0, 520, 0, 310)
+MainFrame.Position = UDim2.new(0.5, -260, 0.35, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(34, 69, 49)
+MainFrame.BackgroundTransparency = 0.15
+MainFrame.BorderSizePixel = 0
+MainFrame.Visible = false
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 12)
+
+-- Draggable Floating Minimize Icon
+local FloatIcon = Instance.new("TextButton", ScreenGui)
+FloatIcon.Name = "MinimizeIcon"
+FloatIcon.Size = UDim2.new(0, 50, 0, 50)
+FloatIcon.Position = UDim2.new(0, 20, 0, 120)
+FloatIcon.BackgroundColor3 = Color3.fromRGB(34, 69, 49)
+FloatIcon.Text = "CENZY"
+FloatIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
+FloatIcon.Font = Enum.Font.GothamBold
+FloatIcon.TextSize = 10
+FloatIcon.Visible = false
+Instance.new("UICorner", FloatIcon).CornerRadius = UDim.new(1, 0)
+Instance.new("UIStroke", FloatIcon).Color = Color3.fromRGB(40, 200, 64)
+
+local fDragging, fDragInput, fDragStart, fStartPos
+FloatIcon.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        fDragging = true fDragStart = input.Position fStartPos = FloatIcon.Position
+    end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then fDragInput = input end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if input == fDragInput and fDragging then
+        local delta = input.Position - fDragStart
+        FloatIcon.Position = UDim2.new(fStartPos.X.Scale, fStartPos.X.Offset + delta.X, fStartPos.Y.Scale, fStartPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- Main Frame Dragging
+local dragging, dragInput, dragStart, startPos
+MainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true dragStart = input.Position startPos = MainFrame.Position
+    end
+end)
+MainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then dragInput = input end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- Topbar
+local TopBar = Instance.new("Frame", MainFrame)
+TopBar.Size = UDim2.new(1, 0, 0, 40)
+TopBar.BackgroundTransparency = 1
+
+local DotRed = Instance.new("Frame", TopBar)
+DotRed.Size = UDim2.new(0, 11, 0, 11)
+DotRed.Position = UDim2.new(0, 14, 0, 14)
+DotRed.BackgroundColor3 = Color3.fromRGB(255, 95, 87)
+Instance.new("UICorner", DotRed).CornerRadius = UDim.new(1, 0)
+
+local DotYellow = Instance.new("Frame", TopBar)
+DotYellow.Size = UDim2.new(0, 11, 0, 11)
+DotYellow.Position = UDim2.new(0, 31, 0, 14)
+DotYellow.BackgroundColor3 = Color3.fromRGB(254, 188, 46)
+Instance.new("UICorner", DotYellow).CornerRadius = UDim.new(1, 0)
+
+local DotGreen = Instance.new("Frame", TopBar)
+DotGreen.Size = UDim2.new(0, 11, 0, 11)
+DotGreen.Position = UDim2.new(0, 48, 0, 14)
+DotGreen.BackgroundColor3 = Color3.fromRGB(40, 200, 64)
+Instance.new("UICorner", DotGreen).CornerRadius = UDim.new(1, 0)
+
+local MinClick = Instance.new("TextButton", TopBar)
+MinClick.Size = UDim2.new(0, 50, 0, 25)
+MinClick.Position = UDim2.new(0, 10, 0, 7)
+MinClick.BackgroundTransparency = 1
+MinClick.Text = ""
+MinClick.MouseButton1Click:Connect(function()
+    MainFrame.Visible = false
+    FloatIcon.Visible = true
+end)
+FloatIcon.MouseButton1Click:Connect(function()
+    MainFrame.Visible = true
+    FloatIcon.Visible = false
+end)
+
+local Title = Instance.new("TextLabel", TopBar)
+Title.Size = UDim2.new(0, 150, 1, 0)
+Title.Position = UDim2.new(0, 75, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "Cenzy Hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 13
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+local Badge = Instance.new("TextLabel", TopBar)
+Badge.Size = UDim2.new(0, 50, 0, 18)
+Badge.Position = UDim2.new(0, 160, 0, 11)
+Badge.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Badge.Text = "v1.0.7"
+Badge.TextColor3 = Color3.fromRGB(34, 69, 49)
+Badge.Font = Enum.Font.GothamBold
+Badge.TextSize = 10
+Instance.new("UICorner", Badge).CornerRadius = UDim.new(0, 9)
+
+-- SUB-GAME TITLED AS REQUESTED
+local GameTitle = Instance.new("TextLabel", TopBar)
+GameTitle.Size = UDim2.new(0, 150, 1, 0)
+GameTitle.Position = UDim2.new(0, 220, 0, 0)
+GameTitle.BackgroundTransparency = 1
+GameTitle.Text = "🦀 MT kepiting"
+GameTitle.TextColor3 = Color3.fromRGB(200, 220, 200)
+GameTitle.Font = Enum.Font.Gotham
+GameTitle.TextSize = 11
+GameTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Sidebar & Pages Configuration
+local SideBar = Instance.new("Frame", MainFrame)
+SideBar.Size = UDim2.new(0, 130, 1, -40)
+SideBar.Position = UDim2.new(0, 0, 0, 40)
+SideBar.BackgroundTransparency = 1
+
+local UIList = Instance.new("UIListLayout", SideBar)
+UIList.Padding = UDim.new(0, 2)
+UIList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+local menuNames = {"Home", "Auto Farm", "Quests", "Webhooks", "Teleport", "Misc", "Server"}
+local buttons = {}
+local pages = {}
+
+local ContentContainer = Instance.new("Frame", MainFrame)
+ContentContainer.Size = UDim2.new(1, -140, 1, -50)
+ContentContainer.Position = UDim2.new(0, 135, 0, 45)
+ContentContainer.BackgroundTransparency = 1
+
+for i, name in ipairs(menuNames) do
+    local Btn = Instance.new("TextButton", SideBar)
+    Btn.Size = UDim2.new(1, -16, 0, 28)
+    Btn.BackgroundTransparency = (name == "Home") and 0.7 or 1
+    Btn.BackgroundColor3 = Color3.fromRGB(50, 95, 69)
+    Btn.Text = "  " .. name
+    Btn.TextColor3 = (name == "Home") and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(185, 210, 195)
+    Btn.Font = Enum.Font.Gotham
+    Btn.TextSize = 11
+    Btn.TextXAlignment = Enum.TextXAlignment.Left
+    Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 6)
+    buttons[name] = Btn
+
+    local Page = Instance.new("Frame", ContentContainer)
+    Page.Size = UDim2.new(1, 0, 1, 0)
+    Page.BackgroundTransparency = 1
+    Page.Visible = (name == "Home")
+    pages[name] = Page
+end
+
+-- Home Setup
+local HomePage = pages["Home"]
+local PingBox = Instance.new("Frame", HomePage)
+PingBox.Size = UDim2.new(1, 0, 0, 55)
+PingBox.BackgroundTransparency = 1
+
+local PingLabel = Instance.new("TextLabel", PingBox)
+PingLabel.Size = UDim2.new(1, 0, 0, 20)
+PingLabel.Text = "📶 Ping"
+PingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+PingLabel.Font = Enum.Font.GothamBold
+PingLabel.TextSize = 13
+PingLabel.TextXAlignment = Enum.TextXAlignment.Left
+PingLabel.BackgroundTransparency = 1
+
+local PingVal = Instance.new("TextLabel", PingBox)
+PingVal.Size = UDim2.new(1, 0, 0, 20)
+PingVal.Position = UDim2.new(0, 0, 0, 22)
+PingVal.Text = "Checking..."
+PingVal.TextColor3 = Color3.fromRGB(200, 220, 200)
+PingVal.Font = Enum.Font.Gotham
+PingVal.TextSize = 11
+PingVal.TextXAlignment = Enum.TextXAlignment.Left
+PingVal.BackgroundTransparency = 1
+
+task.spawn(function()
+    while task.wait(1) do
+        pcall(function()
+            local ping = Stats.Network.ServerToClientPing:GetValue()
+            PingVal.Text = string.format("%.3f ms", ping)
+        end)
+    end
+end)
+
+local SocialBox = Instance.new("Frame", HomePage)
+SocialBox.Size = UDim2.new(1, 0, 1, -65)
+SocialBox.Position = UDim2.new(0, 0, 0, 65)
+SocialBox.BackgroundTransparency = 1
+
+local SocialTitle = Instance.new("TextLabel", SocialBox)
+SocialTitle.Size = UDim2.new(1, 0, 0, 20)
+SocialTitle.Text = "Social Links"
+SocialTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+SocialTitle.Font = Enum.Font.GothamBold
+SocialTitle.TextSize = 13
+SocialTitle.TextXAlignment = Enum.TextXAlignment.Left
+SocialTitle.BackgroundTransparency = 1
+
+local DiscordCard = Instance.new("Frame", SocialBox)
+DiscordCard.Size = UDim2.new(1, 0, 0, 110)
+DiscordCard.Position = UDim2.new(0, 0, 0, 25)
+DiscordCard.BackgroundColor3 = Color3.fromRGB(24, 52, 36)
+DiscordCard.BackgroundTransparency = 0.3
+Instance.new("UICorner", DiscordCard).CornerRadius = UDim.new(0, 12)
+
+local DCName = Instance.new("TextLabel", DiscordCard)
+DCName.Size = UDim2.new(1, -20, 0, 25)
+DCName.Position = UDim2.new(0, 15, 0, 10)
+DCName.Text = "Discord Server"
+DCName.TextColor3 = Color3.fromRGB(255, 255, 255)
+DCName.Font = Enum.Font.GothamBold
+DCName.TextSize = 12
+DCName.TextXAlignment = Enum.TextXAlignment.Left
+DCName.BackgroundTransparency = 1
+
+local DCSub = Instance.new("TextLabel", DiscordCard)
+DCSub.Size = UDim2.new(1, -20, 0, 20)
+DCSub.Position = UDim2.new(0, 15, 0, 30)
+DCSub.Text = "Join our Discord server!"
+DCSub.TextColor3 = Color3.fromRGB(170, 190, 175)
+DCSub.Font = Enum.Font.Gotham
+DCSub.TextSize = 10
+DCSub.TextXAlignment = Enum.TextXAlignment.Left
+DCSub.BackgroundTransparency = 1
+
+local CopyBtn = Instance.new("TextButton", DiscordCard)
+CopyBtn.Size = UDim2.new(1, -30, 0, 32)
+CopyBtn.Position = UDim2.new(0, 15, 0, 60)
+CopyBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CopyBtn.Text = "Copy Link"
+CopyBtn.TextColor3 = Color3.fromRGB(34, 69, 49)
+CopyBtn.Font = Enum.Font.GothamBold
+CopyBtn.TextSize = 12
+Instance.new("UICorner", CopyBtn).CornerRadius = UDim.new(0, 16)
+
+CopyBtn.MouseButton1Click:Connect(function()
+    setclipboard("https://discord.gg/bexus")
+    CopyBtn.Text = "Copied to Clipboard!"
+    task.wait(1)
+    CopyBtn.Text = "Copy Link"
+end)
+
+-- Auto Farm View
+local FarmPage = pages["Auto Farm"]
+local ToggleFarm = Instance.new("TextButton", FarmPage)
+ToggleFarm.Size = UDim2.new(1, 0, 0, 42)
+ToggleFarm.BackgroundColor3 = Color3.fromRGB(24, 52, 36)
+ToggleFarm.Text = "Enable Auto Farm Loop: OFF"
+ToggleFarm.TextColor3 = Color3.fromRGB(255, 105, 105)
+ToggleFarm.Font = Enum.Font.GothamBold
+ToggleFarm.TextSize = 11
+Instance.new("UICorner", ToggleFarm).CornerRadius = UDim.new(0, 8)
+
+local DelayBox = Instance.new("TextBox", FarmPage)
+DelayBox.Size = UDim2.new(1, 0, 0, 38)
+DelayBox.Position = UDim2.new(0, 0, 0, 52)
+DelayBox.BackgroundColor3 = Color3.fromRGB(24, 52, 36)
+DelayBox.Text = "1.0"
+DelayBox.PlaceholderText = "Input Execution Delay (0-3 Sec)"
+DelayBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+DelayBox.Font = Enum.Font.Gotham
+DelayBox.TextSize = 11
+Instance.new("UICorner", DelayBox).CornerRadius = UDim.new(0, 8)
+
+for name, btn in pairs(buttons) do
+    btn.MouseButton1Click:Connect(function()
+        for pName, page in pairs(pages) do
+            page.Visible = (pName == name)
+            buttons[pName].BackgroundTransparency = (pName == name) and 0.7 or 1
+            buttons[pName].TextColor3 = (pName == name) and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(185, 210, 195)
+        end
+    end)
+end
+
+DelayBox.FocusLost:Connect(function()
+    local val = tonumber(DelayBox.Text)
+    _G.TpDelay = val and math.clamp(val, 0, 3) or 1.0
+    DelayBox.Text = string.format("%.1f", _G.TpDelay)
+end)
+
+ToggleFarm.MouseButton1Click:Connect(function()
+    if not KeyVerified then return end
+    _G.AutoFarmActive = not _G.AutoFarmActive
+    ToggleFarm.Text = _G.AutoFarmActive and "Enable Auto Farm Loop: ON" or "Enable Auto Farm Loop: OFF"
+    ToggleFarm.TextColor3 = _G.AutoFarmActive and Color3.fromRGB(105, 255, 105) or Color3.fromRGB(255, 105, 105)
+end)
+
+-- Key Verification Logic
+SubmitBtn.MouseButton1Click:Connect(function()
+    if KeyInput.Text == CorrectKey then
+        KeyVerified = true
+        SubmitBtn.Text = "Access Granted!"
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(105, 255, 105)
+        task.wait(1)
+        KeyFrame:Destroy()
+        MainFrame.Visible = true
+    else
+        SubmitBtn.Text = "Incorrect Key! Try Again."
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255, 105, 105)
+        task.wait(1.5)
+        SubmitBtn.Text = "Check Key"
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    end
+end)
+
+-- Brutal Teleport Core
+local function brutalTeleport(position)
+    if not KeyVerified then return end
+    pcall(function()
+        local char = LocalPlayer.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        local hum = char and char:FindFirstChildOfClass("Humanoid")
+        if hrp and hum and hum.Health > 0 then
+            hum:ChangeState(Enum.HumanoidStateType.Running)
+            hrp.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+            hrp.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+            char:PivotTo(CFrame.new(position + Vector3.new(0, 4, 0)))
+            hrp.Anchored = true
+            task.wait(0.05)
+            hrp.Anchored = false
+        end
+    end)
+end
+
+task.spawn(function()
+    while true do
+        task.wait(0.1)
+        if KeyVerified and _G.AutoFarmActive then
+            for i, cp in ipairs(Checkpoints) do
+                if not _G.AutoFarmActive then break end
+                brutalTeleport(cp.Pos)
+                task.wait(tonumber(_G.TpDelay) or 1.0)
+            end
+            if _G.AutoFarmActive then
+                pcall(function()
+                    local r = ReplicatedStorage:WaitForChild("CP_DropToStart", 5)
+                    if r then r:FireServer() end
+                end)
+                task.wait(2.5)
+            end
+        end
+    end
+end)
