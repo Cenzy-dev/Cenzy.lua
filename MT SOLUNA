@@ -1,0 +1,86 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "CenzyXAether 🌌 | Mount Soluna",
+    LoadingTitle = "Initializing...",
+    LoadingSubtitle = "by CenzyXAether",
+    ConfigurationSaving = { Enabled = true, FileName = "CenzyConfig" },
+    KeySystem = false
+})
+
+local Tab = Window:CreateTab("Main", "home")
+
+local Checkpoints = {
+    {Name = "Checkpoint 1", Pos = Vector3.new(-6.12, 264.71, -823.51)},
+    {Name = "Checkpoint 2", Pos = Vector3.new(676.52, 303.23, -822.48)},
+    {Name = "Checkpoint 3", Pos = Vector3.new(1424.02, 354.54, -819.33)},
+    {Name = "Checkpoint 4", Pos = Vector3.new(2284.11, 454.23, -815.67)},
+    {Name = "Checkpoint 5", Pos = Vector3.new(3017.08, 539.23, -817.02)},
+    {Name = "Checkpoint 6", Pos = Vector3.new(3809.59, 671.54, -826.80)},
+    {Name = "Checkpoint 7", Pos = Vector3.new(4202.96, 906.83, -1483.49)},
+    {Name = "Checkpoint 8", Pos = Vector3.new(4215.46, 1066.83, -2428.49)},
+    {Name = "Checkpoint 9", Pos = Vector3.new(4221.89, 1241.83, -3437.97)},
+    {Name = "Checkpoint 10", Pos = Vector3.new(4227.55, 1404.12, -4503.23)},
+    {Name = "Checkpoint 11", Pos = Vector3.new(4230.67, 1608.76, -5364.66)},
+    {Name = "Checkpoint 12", Pos = Vector3.new(4291.13, 1841.22, -6309.66)},
+    {Name = "Checkpoint 13", Pos = Vector3.new(4294.35, 1971.73, -7220.60)},
+    {Name = "Checkpoint 14", Pos = Vector3.new(4295.71, 2236.22, -8085.06)},
+    {Name = "Checkpoint 15", Pos = Vector3.new(4387.40, 2330.84, -8984.34)},
+    {Name = "Checkpoint 16", Pos = Vector3.new(4375.55, 2570.49, -9840.07)},
+    {Name = "Checkpoint 17", Pos = Vector3.new(4411.35, 2769.78, -10666.49)},
+    {Name = "Checkpoint 18", Pos = Vector3.new(4039.86, 3096.70, -11752.27)},
+    {Name = "Checkpoint 19", Pos = Vector3.new(2989.50, 3347.68, -11755.91)},
+    {Name = "Checkpoint 20", Pos = Vector3.new(1949.68, 3388.22, -11856.44)},
+    {Name = "Checkpoint 21", Pos = Vector3.new(919.14, 3645.22, -11851.47)},
+    {Name = "Checkpoint 22", Pos = Vector3.new(76.70, 3936.39, -11778.47)},
+    {Name = "Checkpoint 23", Pos = Vector3.new(-1359.46, 4364.28, -11461.10)},
+}
+
+local AutoFarm = false
+local DelayTime = 1.6 
+
+local function SafeTeleport(pos)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+    
+    -- Menghapus momentum agar tidak memicu deteksi fisik
+    hrp.AssemblyLinearVelocity = Vector3.zero
+    hrp.AssemblyAngularVelocity = Vector3.zero
+    
+    -- Teleportasi
+    hrp.CFrame = CFrame.new(pos)
+end
+
+Tab:CreateToggle({
+    Name = "Auto Farm Checkpoints",
+    CurrentValue = false,
+    Callback = function(Value)
+        AutoFarm = Value
+        while AutoFarm do
+            for i = 1, #Checkpoints do
+                if not AutoFarm then break end
+                SafeTeleport(Checkpoints[i].Pos)
+                -- Delay untuk render dan menghindari pause
+                task.wait(DelayTime) 
+            end
+            
+            if AutoFarm then
+                task.wait(0.5)
+                local Event = game:GetService("ReplicatedStorage").Shared.Packages._Index["sleitnick_knit@1.7.0"].knit.Services.CheckpointService.RF.ResetCheckpoint
+                Event:InvokeServer()
+                task.wait(2.5) -- Waktu tunggu lebih lama setelah reset agar server sinkron
+            end
+        end
+    end
+})
+
+Tab:CreateSlider({
+    Name = "Delay Render (Sec)",
+    Range = {1, 5},
+    Increment = 0.1,
+    CurrentValue = 1.6,
+    Callback = function(Value) DelayTime = Value end
+})
+
+Rayfield:LoadConfiguration()
