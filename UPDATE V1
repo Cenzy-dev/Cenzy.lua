@@ -1,0 +1,149 @@
+-- [[ CenzyXAether 🌌 | Master Summit Protocol ]] --
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "CenzyXAether 🌌 | Master Protocol",
+   LoadingTitle = "CenzyXAether System Online",
+   LoadingSubtitle = "All Protocols Ready",
+   ConfigurationSaving = { Enabled = true, FileName = "CenzyXAetherMasterConfig" },
+   KeySystem = false
+})
+
+local function SafeTeleport(pos)
+    local char = game.Players.LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        local hrp = char.HumanoidRootPart
+        hrp.Velocity = Vector3.zero
+        hrp.RotVelocity = Vector3.zero
+        hrp.CFrame = CFrame.new(pos)
+    end
+end
+
+-- =================================================================
+-- MOUNT ERLINA
+-- =================================================================
+local ErlinaTab = Window:CreateTab("Mount Erlina", "target")
+local ErlinaEnabled = false
+local ErlinaDelay = 0.4
+local ErlinaCP = {{Pos = Vector3.new(-100.00, 257.03, 831.50)}, {Pos = Vector3.new(690.80, 257.03, 830.07)}, {Pos = Vector3.new(1281.00, 307.03, 732.25)}, {Pos = Vector3.new(1285.00, 317.03, 210.30)}, {Pos = Vector3.new(1287.48, 315.03, -527.10)}, {Pos = Vector3.new(1358.79, 394.03, -1205.31)}, {Pos = Vector3.new(2090.90, 495.03, -1196.50)}, {Pos = Vector3.new(2785.02, 533.03, -1154.08)}, {Pos = Vector3.new(2864.56, 569.03, -1554.94)}, {Pos = Vector3.new(2867.60, 625.03, -1875.70)}, {Pos = Vector3.new(3376.11, 889.03, -2490.49)}, {Pos = Vector3.new(3672.00, 1035.03, -3026.10)}, {Pos = Vector3.new(3717.76, 1234.03, -3589.35)}, {Pos = Vector3.new(3791.84, 1340.03, -4134.11)}, {Pos = Vector3.new(3839.50, 1513.03, -4802.10)}, {Pos = Vector3.new(3795.21, 1838.49, -5726.73)}}
+
+ErlinaTab:CreateSlider({Name = "Delay Antar CP", Range = {0.1, 5}, Increment = 0.1, CurrentValue = 0.4, Callback = function(V) ErlinaDelay = V end})
+ErlinaTab:CreateToggle({Name = "Enable Auto Farm", Callback = function(V)
+    ErlinaEnabled = V
+    if V then task.spawn(function()
+        while ErlinaEnabled do
+            for i, cp in pairs(ErlinaCP) do
+                if not ErlinaEnabled then break end
+                SafeTeleport(cp.Pos)
+                if i == #ErlinaCP then 
+                    for _=1,3 do SafeTeleport(cp.Pos); task.wait(0.2) end
+                    game:GetService("ReplicatedStorage").KennEvents.CP_RequestResetToBC:FireServer()
+                    task.wait(1.2)
+                end
+                task.wait(ErlinaDelay)
+            end
+        end
+    end) end
+end})
+
+-- =================================================================
+-- MOUNT NYENYENYE
+-- =================================================================
+local NyenyeTab = Window:CreateTab("Mount Nyenyenye", nil)
+local NyenyeEnabled = false
+local NyenyeDelay = 1
+local NyenyeCP = {Vector3.new(-88.49, 49.04, -140.59), Vector3.new(-100.25, 57.47, 211.76), Vector3.new(-117.77, 53.65, 504.16), Vector3.new(-121.97, 113.56, 764.57), Vector3.new(-54.68, 77.89, 1070.94), Vector3.new(516.39, 195.56, 1077.91), Vector3.new(691.88, 204.58, 1082.63), Vector3.new(967.76, 185.17, 1081.78), Vector3.new(1295.91, 245.54, 1217.81), Vector3.new(1678.81, 353.46, 1728.96), Vector3.new(1937.98, 386.95, 2165.60), Vector3.new(1936.23, 537.36, 2829.53), Vector3.new(1460.73, 573.35, 3009.92), Vector3.new(1109.45, 557.40, 3108.40), Vector3.new(596.87, 617.45, 3436.91), Vector3.new(400.23, 843.02, 3836.42), Vector3.new(114.96, 973.73, 4023.91), Vector3.new(-9.34, 969.29, 3940.36), Vector3.new(-131.50, 1005.11, 3814.56), Vector3.new(-146.87, 1098.35, 3510.10), Vector3.new(-427.87, 1149.42, 3230.93), Vector3.new(-729.85, 1201.42, 2907.69), Vector3.new(-964.42, 1261.73, 2653.47), Vector3.new(-1142.46, 1257.73, 2385.85), Vector3.new(-1280.86, 1265.73, 2185.34), Vector3.new(-1418.16, 1455.35, 1961.41), Vector3.new(-1388.65, 1455.47, 1895.44), Vector3.new(-1267.25, 1569.36, 1498.99), Vector3.new(-1361.50, 1569.39, 1144.03), Vector3.new(-1647.29, 1641.73, 743.73), Vector3.new(-1964.32, 1644.44, 519.52), Vector3.new(-2274.34, 1805.33, 292.89), Vector3.new(-1561.16, 1829.73, -274.96), Vector3.new(-1073.70, 2120.83, -1108.96)}
+
+NyenyeTab:CreateSlider({Name = "Delay per CP", Range = {0.1, 5}, Increment = 0.1, CurrentValue = 1, Callback = function(V) NyenyeDelay = V end})
+NyenyeTab:CreateToggle({Name = "Aktifkan Auto Farm", Callback = function(V)
+    NyenyeEnabled = V
+    if V then task.spawn(function()
+        while NyenyeEnabled do
+            local Hum = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+            if Hum then Hum:ChangeState(Enum.HumanoidStateType.GettingUp) end
+            for _, pos in ipairs(NyenyeCP) do
+                if not NyenyeEnabled then break end
+                SafeTeleport(pos); task.wait(NyenyeDelay)
+            end
+            local R = game:GetService("ReplicatedStorage"):FindFirstChild("VandraEvents") and game:GetService("ReplicatedStorage").VandraEvents:FindFirstChild("CP_RequestResetToBC")
+            if R then R:FireServer(); task.wait(4) end
+        end
+    end) end
+end})
+
+-- =================================================================
+-- MOUNT TENANG
+-- =================================================================
+local TenangTab = Window:CreateTab("Mount Tenang", nil)
+local TenangEnabled = false
+local TenangDelay = 2.0
+local TenangCP = {Vector3.new(82.50, 170.04, -347.00), Vector3.new(84.50, 351.15, -990.00), Vector3.new(-665.50, 518.54, -1311.00), Vector3.new(-782.05, 520.05, -2050.97), Vector3.new(-1075.92, 645.03, -2699.31), Vector3.new(-928.91, 794.63, -3711.88), Vector3.new(-656.50, 840.41, -4381.89), Vector3.new(210.00, 896.53, -4415.00), Vector3.new(1168.22, 1208.47, -4648.81), Vector3.new(1554.00, 1337.68, -4661.00), Vector3.new(2555.80, 1453.02, -4771.83), Vector3.new(3572.26, 1505.34, -4228.68), Vector3.new(3796.00, 1553.35, -3332.00), Vector3.new(3958.00, 1384.74, -2273.00), Vector3.new(3986.00, 1399.74, -1337.00), Vector3.new(3989.00, 1385.65, -209.20), Vector3.new(5077.27, 1522.17, 26.98), Vector3.new(5805.93, 1531.03, -14.11), Vector3.new(6611.00, 1754.32, -323.00), Vector3.new(7377.00, 1688.15, -982.00), Vector3.new(8359.36, 1829.93, -1049.25), Vector3.new(8951.00, 2027.20, -1003.00), Vector3.new(9308.35, 2333.03, -1052.73), Vector3.new(10087.76, 2310.28, -1121.03), Vector3.new(10800.00, 2308.51, -1038.00), Vector3.new(11731.39, 2176.61, -1105.69), Vector3.new(12528.91, 2092.45, -1954.24), Vector3.new(12361.00, 2066.89, -3273.00), Vector3.new(12252.75, 1946.74, -4423.21), Vector3.new(12417.75, 1966.89, -5421.21), Vector3.new(11903.73, 2022.17, -6562.91), Vector3.new(11045.97, 2144.15, -7411.15), Vector3.new(10329.79, 1949.24, -8323.20), Vector3.new(9776.75, 1933.35, -9233.25), Vector3.new(9815.50, 2779.92, -10591.32)}
+
+TenangTab:CreateInput({Name = "Jeda Teleport (Detik)", PlaceholderText = "Contoh: 2.0", Callback = function(V) TenangDelay = tonumber(V) or 2.0 end})
+TenangTab:CreateToggle({Name = "Auto Farm (Stealth)", Callback = function(V)
+    TenangEnabled = V
+    if V then task.spawn(function()
+        while TenangEnabled do
+            for _, cp in ipairs(TenangCP) do
+                if not TenangEnabled then break end
+                SafeTeleport(cp + Vector3.new(0, 5, 0))
+                task.wait(TenangDelay)
+            end
+            if TenangEnabled then game:GetService("ReplicatedStorage"):WaitForChild("SummitRemotes"):WaitForChild("ResetCheckpoint"):FireServer(); task.wait(2) end
+        end
+    end) end
+end})
+
+-- =================================================================
+-- MOUNT TEDUH
+-- =================================================================
+local TeduhTab = Window:CreateTab("Mount Teduh", nil)
+local TeduhEnabled = false
+local TeduhDelay = 1
+local TeduhCP = {{Name = "Checkpoint 1", Pos = Vector3.new(-1300.00, 21.03, 1570.00)}, {Name = "Checkpoint 2", Pos = Vector3.new(-8833.02, 2205.03, -25927.66)}, {Name = "Checkpoint 3", Pos = Vector3.new(-9587.56, 2193.03, -26684.47)}, {Name = "Summit", Pos = Vector3.new(-9587.56, 3000.00, -26684.47)}}
+
+TeduhTab:CreateSlider({Name = "Manual Delay", Range = {0.1, 5}, Increment = 0.1, CurrentValue = 1, Callback = function(V) TeduhDelay = V end})
+TeduhTab:CreateToggle({Name = "Auto Farm Sequence", Callback = function(V)
+    TeduhEnabled = V
+    if V then task.spawn(function()
+        while TeduhEnabled do
+            for _, cp in pairs(TeduhCP) do
+                if not TeduhEnabled then break end
+                SafeTeleport(cp.Pos)
+                task.wait(TeduhDelay)
+            end
+            game:GetService("ReplicatedStorage").KeongReplic.RemoteEvents.CheckpointReset:FireServer()
+            task.wait(1)
+        end
+    end) end
+end})
+
+-- =================================================================
+-- MOUNT LONELY
+-- =================================================================
+local LonelyTab = Window:CreateTab("Mount Lonely", "mountain")
+local _G_Delay = 1
+local LonelyCP = {{Pos = Vector3.new(-20.00, 30.34, -1045.00)}, {Pos = Vector3.new(372.00, 282.82, -2030.00)}, {Pos = Vector3.new(385.00, 282.81, -3021.00)}, {Pos = Vector3.new(-351.62, 285.03, -3750.52)}, {Pos = Vector3.new(-473.18, 283.24, -4688.35)}, {Pos = Vector3.new(-402.00, 668.23, -5176.00)}, {Pos = Vector3.new(60.00, 668.15, -6023.00)}, {Pos = Vector3.new(842.00, 413.43, -6804.00)}, {Pos = Vector3.new(1590.00, 413.20, -6537.00)}, {Pos = Vector3.new(2226.60, 1240.34, -6426.66)}, {Pos = Vector3.new(3119.55, 1032.59, -6256.41)}, {Pos = Vector3.new(3940.96, 1032.46, -6623.71)}, {Pos = Vector3.new(4617.08, 1032.48, -5996.48)}, {Pos = Vector3.new(5280.88, 1405.51, -5660.83)}, {Pos = Vector3.new(5816.80, 1405.29, -4856.61)}, {Pos = Vector3.new(6534.31, 1650.39, -4379.54)}, {Pos = Vector3.new(7065.00, 1649.03, -4086.00)}, {Pos = Vector3.new(7350.20, 2143.85, -3840.18)}, {Pos = Vector3.new(7794.98, 2143.71, -3115.05)}, {Pos = Vector3.new(8646.00, 2144.04, -3003.00)}, {Pos = Vector3.new(9020.66, 2382.82, -3006.38)}, {Pos = Vector3.new(9020.66, 2382.82, -3006.38)}}
+
+LonelyTab:CreateSlider({Name = "Manual Delay (Seconds)", Range = {0.1, 5}, Increment = 0.1, Suffix = "s", CurrentValue = 1, Callback = function(V) _G_Delay = V end})
+LonelyTab:CreateToggle({Name = "Auto Farm Enabled", Callback = function(V)
+    _G.AutoFarm = V
+    while _G.AutoFarm do
+        for _, cp in pairs(LonelyCP) do
+            if not _G.AutoFarm then break end
+            SafeTeleport(cp.Pos)
+            task.wait(_G_Delay)
+        end
+        game:GetService("ReplicatedStorage").CPEvents.ResetToBC:FireServer()
+        task.wait(1)
+    end
+end})
+
+game.CoreGui.ChildAdded:Connect(function(child)
+   if child:IsA("ScreenGui") and (child.Name == "CrashGui" or child.Name == "AdminKick") then
+      child:Destroy()
+   end
+end)
+
+Rayfield:LoadConfiguration()
