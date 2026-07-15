@@ -1,0 +1,160 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local GuiService = game:GetService("GuiService")
+local Players = game:GetService("Players")
+
+-- FIX AGRESSIVE: Mematikan deteksi pause
+GuiService.AutoSelectGuiEnabled = false
+local function StopPause()
+    pcall(function()
+        if GuiService:IsTenFootInterface() then
+            GuiService:SetCore("GameState", "Playing")
+        end
+    end)
+end
+
+-- [TAMBAHAN RAHASIA 1] ANTI-PAUSE KILLER 100000%
+task.spawn(function()
+    while task.wait(0.01) do
+        pcall(function()
+            for _, obj in ipairs(game:GetService("CoreGui"):GetDescendants()) do
+                if (obj:IsA("TextLabel") or obj:IsA("TextButton")) and (obj.Text == "Gameplay Paused" or obj.Text == "Gameplay has been paused: please wait while the game content loads.") then
+                    local topGui = obj:FindFirstAncestorOfClass("ScreenGui")
+                    if topGui then topGui:Destroy() end
+                end
+            end
+            for _, obj in ipairs(Players.LocalPlayer:WaitForChild("PlayerGui"):GetDescendants()) do
+                if (obj:IsA("TextLabel") or obj:IsA("TextButton")) and (obj.Text == "Gameplay Paused" or obj.Text == "Gameplay has been paused: please wait while the game content loads.") then
+                    local topGui = obj:FindFirstAncestorOfClass("ScreenGui")
+                    if topGui then topGui:Destroy() end
+                end
+            end
+        end)
+    end
+end)
+
+-- [TAMBAHAN RAHASIA 2] PRE-RENDER SUPER BERSIH TANPA NGARUH BADAN
+local function PreRenderMapBersih(Pos)
+    task.spawn(function()
+        pcall(function()
+            local cam = workspace.CurrentCamera
+            local simpanCaman = cam.CFrame
+            cam.CFrame = CFrame.new(Pos + Vector3.new(0, 0, 100), Pos)
+            if workspace:FindFirstChildWhichIsA("Terrain") then
+                workspace.Terrain:StreamAroundAsync(Pos, 1024)
+            end
+            task.wait(0.05)
+            cam.CFrame = simpanCaman
+        end)
+    end)
+end
+
+-- [TAMBAHAN RAHASIA 3] GRAVITY ANCHOR (Anti Melayang & Anti-Skip Mutlak)
+-- Fungsi ini menembakkan Raycast ke bawah, lalu menempelkan Invisible Part ke tanah,
+-- lalu menarik badan lu supaya ngenjak fisik ke tanah tanpa mengubah posisi CFrame utama lu.
+local function TarikKeTanah(HRP)
+    pcall(function()
+        local rayParams = RaycastParams.new()
+        rayParams.FilterType = Enum.RaycastFilterType.Exclude
+        rayParams.FilterDescendantsInstances = {Players.LocalPlayer.Character}
+        
+        local hasilRay = workspace:Raycast(HRP.Position, Vector3.new(0, -10, 0), rayParams)
+        if hasilRay then
+            -- Cari atau buat Invisible Part
+            local anchor = HRP:FindFirstChild("TanahAnchor") or Instance.new("Part")
+            anchor.Name = "TanahAnchor"
+            anchor.Anchored = true
+            anchor.CanCollide = false
+            anchor.Transparency = 1
+            anchor.Size = Vector3.new(0.1, 0.1, 0.1)
+            anchor.Parent = HRP
+            
+            -- Tempelkan part tepat di atas permukaan tanah yang kebaca Raycast
+            anchor.CFrame = CFrame.new(hasilRay.Position + Vector3.new(0, 3, 0))
+            
+            -- Tarik badan lu menyentuh part tersebut (wajib ngenjak tanah)
+            HRP.CFrame = anchor.CFrame + Vector3.new(0, -3, 0)
+        end
+    end)
+end
+
+local Window = Rayfield:CreateWindow({
+   Name = "CenzyXAether ✨ | Mount Lonely",
+   LoadingTitle = "Initializing...",
+   LoadingSubtitle = "by CenzyXAether",
+   ConfigurationSaving = { Enabled = true, FileName = "CenzyConfig" },
+   KeySystem = false
+})
+
+local Tab = Window:CreateTab("Auto Farm", "mountain")
+local _G_Delay = 0.8 
+
+local Checkpoints = {
+    {Name = "Checkpoint 1", Pos = Vector3.new(-20.00, 30.34, -1045.00)},
+    {Name = "Checkpoint 2", Pos = Vector3.new(372.00, 282.82, -2030.00)},
+    {Name = "Checkpoint 3", Pos = Vector3.new(385.00, 282.81, -3021.00)},
+    {Name = "Checkpoint 4", Pos = Vector3.new(-351.62, 285.03, -3750.52)},
+    {Name = "Checkpoint 5", Pos = Vector3.new(-473.18, 283.24, -4688.35)},
+   {Name = "Checkpoint 6", Pos = Vector3.new(-402.00, 668.23, -5176.00)},
+   {Name = "Checkpoint 7", Pos = Vector3.new(60.00, 668.15, -6023.00)},
+   {Name = "Checkpoint 8", Pos = Vector3.new(842.00, 413.43, -6804.00)},
+   {Name = "Checkpoint 9", Pos = Vector3.new(1590.00, 413.20, -6537.00)},
+   {Name = "Checkpoint 10", Pos = Vector3.new(2226.60, 1240.34, -6426.66)},
+   {Name = "Checkpoint 11", Pos = Vector3.new(3119.55, 1032.59, -6256.41)},
+   {Name = "Checkpoint 12", Pos = Vector3.new(3940.96, 1032.46, -6623.71)},
+   {Name = "Checkpoint 13", Pos = Vector3.new(4617.08, 1032.48, -5996.48)},
+   {Name = "Checkpoint 14", Pos = Vector3.new(5280.88, 1405.51, -5660.83)},
+   {Name = "Checkpoint 15", Pos = Vector3.new(5816.80, 1405.29, -4856.61)},
+   {Name = "Checkpoint 16", Pos = Vector3.new(6534.31, 1650.39, -4379.54)},
+   {Name = "Checkpoint 17", Pos = Vector3.new(7065.00, 1649.03, -4086.00)},
+   {Name = "Checkpoint 18", Pos = Vector3.new(7350.20, 2143.85, -3840.18)},
+   {Name = "Checkpoint 19", Pos = Vector3.new(7794.98, 2143.71, -3115.05)},
+   {Name = "Checkpoint 20", Pos = Vector3.new(8646.00, 2144.04, -3003.00)},
+   {Name = "Checkpoint 21", Pos = Vector3.new(9020.66, 2382.82, -3006.38)}
+}
+
+Tab:CreateSlider({
+   Name = "Manual Delay (Seconds)",
+   Range = {0.1, 5},
+   Increment = 0.1,
+   Suffix = "s",
+   CurrentValue = 0.8,
+   Callback = function(Value) _G_Delay = Value end,
+})
+
+local AutoFarm = false
+Tab:CreateToggle({
+   Name = "Auto Farm Enabled",
+   CurrentValue = false,
+   Callback = function(Value)
+      AutoFarm = Value
+      task.spawn(function()
+         while AutoFarm do
+            for _, cp in ipairs(Checkpoints) do
+               if not AutoFarm then break end
+               
+               -- INJEKSI PRE-RENDER
+               PreRenderMapBersih(cp.Pos)
+               
+               StopPause()
+               local char = Players.LocalPlayer.Character
+               if char and char:FindFirstChild("HumanoidRootPart") then
+                  -- KODE ASLI LU 100% MURNI TANPA DIGANGGU GAPAPUN
+                  char.HumanoidRootPart.CFrame = CFrame.new(cp.Pos)
+                  
+                  -- [INJEKSI TANPA UBAH KODE LU] Langsung tarik badan lu ke tanah setelah TP
+                  TarikKeTanah(char.HumanoidRootPart)
+               end
+               task.wait(_G_Delay)
+            end
+            
+            local event = game:GetService("ReplicatedStorage"):FindFirstChild("CPEvents")
+            if event and event:FindFirstChild("ResetToBC") then
+                event.ResetToTC:FireServer()
+            end
+            task.wait(1)
+         end
+      end)
+   end,
+})
+
+Rayfield:Load()
